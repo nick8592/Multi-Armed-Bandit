@@ -191,9 +191,9 @@ def plot_time_compare(algorithm_name_1, time_1, algorithm_name_2, time_2, algori
     plt.title('Time Comparison')
     plt.xlabel('Algorithm')
     plt.ylabel('Time')
-    plt.bar(algorithm_name_1, time_1, width=0.8, bottom=None, align='center')
-    plt.bar(algorithm_name_2, time_2, width=0.8, bottom=None, align='center')
-    plt.bar(algorithm_name_3, time_3, width=0.8, bottom=None, align='center')
+    plt.bar(algorithm_name_1, time_1, width=0.8, bottom=None, align='center', color='red')
+    plt.bar(algorithm_name_2, time_2, width=0.8, bottom=None, align='center', color='blue')
+    plt.bar(algorithm_name_3, time_3, width=0.8, bottom=None, align='center', color='green')
     plt.show()
 
 

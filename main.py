@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
-EPISODE = 10000
+EPISODE = 1000
 Number_of_Bandits = 4
 p_bandits = [0.5, 0.1, 0.8, 0.9]  # Probability of each bandit
 
@@ -177,21 +177,21 @@ def plot_compare(hit_epsilon, hit_ucb, hit_thompson):
     plt.plot(x, y_epsilon, color='red', label='Epsilon-Greedy')
     plt.plot(x, y_ucb, color='blue', label='UCB')
     plt.plot(hit_thompson, color='green', label='Thompson')
+    plt.legend(title='Parameter where:')
     plt.show()
 
 
-np.random.seed(23)
+np.random.seed(21)
 E = EpsilonGreedy()
 E.calculate()
-E.plot()
+# E.plot()
 
 U = UCB()
 U.calculate()
-U.plot()
+# U.plot()
 
 T = Thompson()
 T.calculate()
-T.plot_rewards(T.average_reward)
+# T.plot_rewards(T.average_reward)
 
 plot_compare(hit_epsilon=E.hit, hit_ucb=U.hit, hit_thompson=T.average_reward)
-

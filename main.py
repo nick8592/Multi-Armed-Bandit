@@ -190,15 +190,19 @@ def plot_reward_compare(hit_epsilon, hit_ucb, hit_thompson):
 def plot_time_compare(algorithm_name_1, time_1, algorithm_name_2, time_2, algorithm_name_3, time_3):
     plt.title('Time Comparison')
     plt.xlabel('Algorithm')
-    plt.ylabel('Time')
+    plt.ylabel('Time(s)')
+    time = [time_1, time_2, time_3]
     plt.bar(algorithm_name_1, time_1, width=0.8, bottom=None, align='center', color='red')
     plt.bar(algorithm_name_2, time_2, width=0.8, bottom=None, align='center', color='blue')
     plt.bar(algorithm_name_3, time_3, width=0.8, bottom=None, align='center', color='green')
+    plt.text(0, time[0], round(time[0], 5))
+    plt.text(1, time[1], round(time[1], 5))
+    plt.text(2, time[2], round(time[2], 5))
     plt.show()
 
 
 # main
-np.random.seed(37)
+np.random.seed(66)
 ALGORITHM = ['Epsilon Greedy', 'UCB', 'Thompson Sampling']
 
 # Epsilon Greedy

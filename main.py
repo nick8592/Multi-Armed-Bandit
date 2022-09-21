@@ -179,10 +179,10 @@ def plot_reward_compare(hit_epsilon, hit_ucb, hit_thompson):
 
     plt.title('Average Reward Comparison')
     plt.xlabel('Episode')
-    plt.ylabel('Reward')
+    plt.ylabel('Average Reward')
     plt.plot(x, y_epsilon, color='red', label='Epsilon-Greedy')
     plt.plot(x, y_ucb, color='blue', label='UCB')
-    plt.plot(hit_thompson, color='green', label='Thompson')
+    plt.plot(hit_thompson, color='green', label='Thompson Sampling')
     plt.legend(title='Parameter where:')
     plt.show()
 

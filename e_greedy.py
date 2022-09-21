@@ -1,24 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+import scipy.stats as stats
+import time
 
 EPISODE = 1000
 Number_of_Bandits = 4
-p_bandits = [0.5, 0.1, 0.8, 0.9]  # Probability of each bandit
+p_bandits = [0.1, 0.2, 0.4, 0.9]  # Probability of each bandit
+
 
 class EpsilonGreedy:
     def __init__(self):
-        self.epsilon = 0.1  # 设定epsilon值
-        self.num_arm = Number_of_Bandits  # 设置arm的数量
-        self.arms = p_bandits  # 设置每一个arm的均值，为0-1之间的随机数
-        self.best = np.argmax(self.arms)  # 找到最优arm的index
-        self.T = EPISODE  # 设置进行行动的次数
-        self.hit = np.zeros(self.T)  # 用来记录每次行动是否找到最优arm
-        self.reward = np.zeros(self.num_arm)  # 用来记录每次行动后各个arm的平均收益
-        self.num = np.zeros(self.num_arm)  # 用来记录每次行动后各个arm被拉动的总次数
+        self.epsilon = 0.1  # define "epsilon" value
+        self.num_bandits = Number_of_Bandits  # number of bandits
+        self.bandits = p_bandits  # each bandit probability, between 0~1
+        self.best = np.argmax(self.bandits)  # index of the best bandit, which has the highest probability
+        self.T = EPISODE  # number of steps for Epsilon Greedy
+        self.hit = np.zeros(self.T)  # if action choose the best bandit, then hit +1
+        self.reward = np.zeros(self.num_bandits)  # each bandit its "reward"
+        self.num = np.zeros(self.num_bandits)  # each bandit its number of being selected
 
-    def get_reward(self, i):  # i为arm的index
-        return self.arms[i] + np.random.normal(0, 1)  # 生成的收益为arm的均值加上一个波动
+    def get_reward(self, i):  # i = index of bandit
+        reward = self.bandits[i] + np.random.normal(0, 1)  # probability of bandit + random value between -1~1
+        return reward
 
     def update(self, i):
         self.num[i] += 1
@@ -32,7 +35,7 @@ class EpsilonGreedy:
         a = np.argmax(self.reward)
         index = a
         while index == a:
-            index = np.random.randint(0, self.num_arm)
+            index = np.random.randint(0, self.num_bandits)
         return index
 
     def calculate(self):
@@ -43,24 +46,36 @@ class EpsilonGreedy:
                 index = self.explore()
 
             if index == self.best:
-                self.hit[i] = 1  # 如果拿到的arm是最优的arm，则将其记为1
+                self.hit[i] = 1  # if selected bandit has the highest probability, hit +1
             self.update(index)
 
-    def plot(self):  # 画图查看收敛性
+    def plot(self):
         x = np.array(range(self.T))
         y1 = np.zeros(self.T)
+        y2 = np.ones(self.T)*(1-self.epsilon)
         t = 0
         for i in range(self.T):
             t += self.hit[i]
-            y1[i] = t/(i+1)
-        y2 = np.ones(self.T)*(1-self.epsilon)
-        plt.plot(x, y1)
-        plt.plot(x, y2)
+            y1[i] = t/(i+1)  # y = correct rate at step "i"
+        plt.xlabel('Episode')
+        plt.ylabel('Reward')
+        plt.grid(axis='x', color='0.80')
+        plt.plot(x, y1, label='Epsilon')
+        plt.plot(x, y2, label='1-Epsilon')
+        plt.legend(title='Parameter where:')
         plt.show()
 
 
-np.random.seed(23)
+# main
+np.random.seed(37)
+
+# Epsilon Greedy
+start_epsilon = time.time()
 E = EpsilonGreedy()
 E.calculate()
+end_epsilon = time.time()
+epsilon_time = end_epsilon - start_epsilon
 E.plot()
+
+print(f"Epsilon Greedy Time: {round(epsilon_time, 5)}(s)")
 

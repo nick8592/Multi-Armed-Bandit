@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
+import time
 
 EPISODE = 1000
 Number_of_Bandits = 4
-p_bandits = [0.5, 0.1, 0.8, 0.9]  # Probability of each bandit
+p_bandits = [0.1, 0.2, 0.4, 0.9]  # Probability of each bandit
 
 
 class EpsilonGreedy:
@@ -163,7 +164,7 @@ class Thompson:
         plt.show()
 
 
-def plot_compare(hit_epsilon, hit_ucb, hit_thompson):
+def plot_reward_compare(hit_epsilon, hit_ucb, hit_thompson):
     x = np.array(range(EPISODE))
     y_epsilon = np.zeros(EPISODE)
     y_ucb = np.zeros(EPISODE)
@@ -186,18 +187,48 @@ def plot_compare(hit_epsilon, hit_ucb, hit_thompson):
     plt.show()
 
 
-np.random.seed(39)
+def plot_time_compare(algorithm_name_1, time_1, algorithm_name_2, time_2, algorithm_name_3, time_3):
+    plt.title('Time Comparison')
+    plt.xlabel('Algorithm')
+    plt.ylabel('Time')
+    plt.bar(algorithm_name_1, time_1, width=0.8, bottom=None, align='center')
+    plt.bar(algorithm_name_2, time_2, width=0.8, bottom=None, align='center')
+    plt.bar(algorithm_name_3, time_3, width=0.8, bottom=None, align='center')
+    plt.show()
+
+
+# main
+np.random.seed(37)
+ALGORITHM = ['Epsilon Greedy', 'UCB', 'Thompson Sampling']
+
+# Epsilon Greedy
+start_epsilon = time.time()
 E = EpsilonGreedy()
 E.calculate()
+end_epsilon = time.time()
+epsilon_time = end_epsilon - start_epsilon
 # E.plot()
 
+# Upper Confidence Bound
+start_ucb = time.time()
 U = UCB()
 U.calculate()
+end_ucb = time.time()
+ucb_time = end_ucb - start_ucb
 # U.plot()
 
+# Thompson Sampling
+start_thompson = time.time()
 T = Thompson()
 T.calculate()
+end_thompson = time.time()
+thompson_time = end_thompson - start_thompson
 # T.plot_rewards(T.average_reward)
 
-plot_compare(hit_epsilon=E.hit, hit_ucb=U.hit, hit_thompson=T.average_reward)
+print(f"Epsilon Greedy Time: {round(epsilon_time, 5)}(s)")
+print(f"UCB Time: {round(ucb_time, 5)}(s)")
+print(f"Thompson Sampling Time: {round(thompson_time, 5)}(s)")
+
+plot_reward_compare(hit_epsilon=E.hit, hit_ucb=U.hit, hit_thompson=T.average_reward)
+plot_time_compare(ALGORITHM[0], epsilon_time, ALGORITHM[1], ucb_time, ALGORITHM[2], thompson_time)
 
